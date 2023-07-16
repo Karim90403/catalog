@@ -1,7 +1,7 @@
 <template>
   <router-link to="/">{{ $route.query.name }}</router-link>
   <div class="category">
-    <div class="subcategory-menu">
+    <div v-if="subcategories.length >= 2" class="subcategory-menu">
       <span class="subcategory-menu_item">Все продукты</span>
       <span v-for="subcategory in subcategories" :key="subcategory.id" @click="loadSubcategoryMenu(subcategory.slug)" class="subcategory-menu_item">{{ subcategory.name }}</span>
     </div>
@@ -33,10 +33,8 @@ export default {
   methods:{
     async loadCategoryMenu(){
       try {
-        console.log(this.$route.params)
         let res = await axios.get(`https://nlstar.com/ru/api/catalog3/v1/menutags/${this.$route.query.slug}/`)
         this.products = res.data.products;
-        this.subcategories = res.data.tags
       } catch (error) {
         alert(error);
       }
@@ -48,10 +46,23 @@ export default {
       } catch (error) {
         alert(error);
       }
+    },
+    async loadSubcategories(){
+      try {
+        let res = await axios.get("https://nlstar.com/ru/api/catalog3/v1/menutags/")
+        res.data.tags.forEach(element => {
+          if (element.slug == this.$route.query.slug) {
+            this.subcategories = element.children;
+          }
+        });
+      } catch (error) {
+        alert(error);
+      }
     }
   },
   async mounted(){
     this.loadCategoryMenu();
+    this.loadSubcategories();
   }
 }
 </script>

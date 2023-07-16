@@ -1,9 +1,5 @@
 <template>
   <h1>Категории товаров</h1>
-  <h2>{{ cityName }}</h2>
-  <input type="text" v-model="searchInput">
-  <button @click=""></button>
-  <p v-for="city in cityArr" :key="city.id" @click="changeCity(city.id, city.city)">{{ city.label }}</p>
   <div class="category-wrapper">
     <div class="category-container">
       <div v-for="tag in menuTags" :key="tag.id" @click="loadCtegory(tag.slug, tag.name)" class="category-item">
@@ -23,9 +19,7 @@ export default {
   data(){
     return {
       menuTags: [],
-      cityArr: [],
-      cityName: '',
-      searchInput: ''
+      buttonActive: false
     }
   },
   methods: {
@@ -33,7 +27,6 @@ export default {
       try {
         let res = await axios.get(`https://nlstar.com/ru/api/catalog3/v1/menutags/?city_id=${city_id}`)
         this.menuTags = res.data.tags;
-        this.cityName = localStorage.getItem("city") ?? "Новосибирск";
       } catch (error) {
         alert(error);
       }
@@ -47,22 +40,14 @@ export default {
         }
       })
     },
-    async getCity(term){
-      try {
-        let res = await axios.get(`https://nlstar.com/api/catalog3/v1/city/?country=ru&term=${term}`)
-        this.cityArr = res.data.data;
-      } catch (error) {
-        alert(error);
-      }
-    },
-    changeCity(id, city) {
-      localStorage.setItem("city", city);
-      this.loadMenu(id);
-    }
   },
   async mounted(){
-    this.loadMenu(1);
-    this.getCity("Мос")
+    if (localStorage.getItem("id")) {
+      this.loadMenu(localStorage.getItem("id"));
+    }
+    else {
+      this.loadMenu(1);
+    }
   }
 }
 </script>
@@ -84,6 +69,7 @@ export default {
 		opacity: 1;
 	}
 }
+
 .category-wrapper{
   max-width: 100vw;
   display: flex;
