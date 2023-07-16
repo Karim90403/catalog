@@ -1,5 +1,5 @@
 <template>
-  <h1>Категории товаров</h1>
+  <span class="title">Категории товаров</span>
   <div class="category-wrapper">
     <div class="category-container">
       <div v-for="tag in menuTags" :key="tag.id" @click="loadCtegory(tag.slug, tag.name)" class="category-item">
@@ -70,6 +70,17 @@ export default {
 	}
 }
 
+@font-face {
+  font-family: "FuturaPT";
+  src: local("FuturaPT"),
+    url(../fonts/FuturaPT.ttf) format("truetype");
+}
+
+.title{
+  font-family: "FuturaPT";
+  font-size: 44px;
+  margin-left: 20vw;
+}
 .category-wrapper{
   max-width: 100vw;
   display: flex;
@@ -84,7 +95,9 @@ export default {
 .category-item{
   position: relative;
   max-width: fit-content;
+  max-height: fit-content;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .category-item:hover img{
@@ -102,5 +115,6 @@ export default {
   width: 70%;
   top: 20px;
   left: 20px;
+  font-family: "FuturaPT";
 }
 </style>
