@@ -1,21 +1,28 @@
 <template>
   <div class="city" @click="showPopup = true">
     <img src="../src/assets/geoposition.png">
-    {{ cityName }}</div>
-  <router-view v-if="reranderComponents"/>
+    {{ cityName }}
+  </div>
+  <router-view v-if="reranderComponents" />
   <div v-show="showPopup" class="city-popup_container">
     <div @click="showPopup = false" class="city-popup_mask"></div>
     <div class="city-popup">
       <span class="city-popup_title">Выбор населённого пункта:</span>
-      <img class="city-popup_close" src="../src/assets/close.png">
+      <img class="city-popup_close" @click="showPopup = false" src="../src/assets/close.png">
       <div class="city-popup_search">
-        <div class="city-popup_input_container">
-          <input type="text" v-model="searchInput" @input="getCity" placeholder="Например, Санкт-петербург" class="city-popup_input" :class="{'city-popup_input_actie': showCities}">
+        <div class="city-popup_input_container" :class="{ 'city-popup_input_container_active': showCities }">
+          <div class="input_group" style="position: relative !important;">
+            <input type="text" v-model="searchInput" @input="getCity" placeholder="Например, Санкт-петербург"
+              class="city-popup_input" :class="{ 'city-popup_input_actie': showCities }">
+            <span class="clear_button" @click="searchInput = ''; showCities= false"><img @click="showPopup = false" src="../src/assets/close.png"></span>
+          </div>
           <div v-if="showCities" class="city-popup_list">
-            <span v-for="city in cityArr" :key="city.id" @click="chooseCity(city.id, city.city, city.label)">{{ city.label }}</span>
+            <span style="padding: .5em;" v-for="city in cityArr" :key="city.id"
+              @click="chooseCity(city.id, city.city, city.label)">{{ city.label }}</span>
           </div>
         </div>
-        <span @click="changeCity()" :class="buttonActive ? 'city-popup_button_active' : 'city-popup_button_disabled'">Подтверить</span>
+        <span @click="changeCity()"
+          :class="buttonActive ? 'city-popup_button_active' : 'city-popup_button_disabled'">Подтверить</span>
       </div>
     </div>
   </div>
@@ -25,8 +32,8 @@
 import axios from 'axios';
 
 export default {
-  data(){
-    return{
+  data() {
+    return {
       cityArr: [],
       cityName: '',
       searchInput: '',
@@ -37,9 +44,9 @@ export default {
       reranderComponents: true,
     }
   },
-  methods:{
-    async getCity(){
-      if(this.searchInput.length >= 3){
+  methods: {
+    async getCity() {
+      if (this.searchInput.length >= 3) {
         this.showCities = true;
         try {
           let res = await axios.get(`https://nlstar.com/api/catalog3/v1/city/?country=ru&term=${this.searchInput}`)
@@ -53,7 +60,7 @@ export default {
       }
     },
     changeCity() {
-      if(this.searchInput.length >= 3){
+      if (this.searchInput.length >= 3) {
         this.cityName = localStorage.getItem("city");
         this.loadMenu(this.id);
         this.showPopup = false;
@@ -67,12 +74,12 @@ export default {
       this.buttonActive = true;
       this.showCities = false;
     },
-    loadMenu(){
-     this.reranderComponents = false;
-     this.reranderComponents = true;
+    loadMenu() {
+      this.reranderComponents = false;
+      this.reranderComponents = true;
     },
   },
-  mounted(){
+  mounted() {
     this.cityName = localStorage.getItem("city") ?? "Новосибирск";
   }
 }
@@ -84,7 +91,8 @@ export default {
   src: local("FuturaPT"),
     url(./fonts/FuturaPT.ttf) format("truetype");
 }
- .city {
+
+.city {
   font-family: "FuturaPT";
   display: flex;
   align-items: center;
@@ -114,7 +122,7 @@ export default {
   height: 100vh;
 }
 
-.city-popup_container{
+.city-popup_container {
   position: fixed;
   display: flex;
   justify-content: center;
@@ -131,14 +139,15 @@ export default {
   flex-direction: column;
   color: #000;
   background-color: #fff;
-  box-shadow: 0px 2px 10px 0px rgba(151, 151, 151, 0.2); 
+  box-shadow: 0px 2px 10px 0px rgba(151, 151, 151, 0.2);
   width: 40vw;
-  height: 13vh;
+  height: 144px;
   padding-left: 2.5%;
   padding-top: 28px;
   border-radius: 4px;
 }
-.city-popup_title{
+
+.city-popup_title {
   font-family: "FuturaPT";
   color: #000;
   font-size: 1.4rem;
@@ -147,17 +156,20 @@ export default {
   letter-spacing: 0px;
 }
 
-.city-popup_close{
+.city-popup_close {
   position: absolute;
   right: 1em;
   top: 1em;
   width: 1em;
   height: 1em;
+  cursor: pointer;
 }
 
-.city-popup_search{
-  display: inline-block;
+.city-popup_search {
+  margin-top: 1em;
+  display: flex;
 }
+
 .city-popup_list {
   font-family: "FuturaPT";
   display: flex;
@@ -166,39 +178,63 @@ export default {
   background-color: #fff;
   padding: 12px 20px;
   font-size: 1rem;
+  border-radius: 8px;
+  overflow-y: scroll;
   box-sizing: border-box;
   cursor: pointer;
   margin-top: 0;
+  max-height: 30vh;
 }
 
-.city-popup_input_container{
+.city-popup_input_container {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   width: 70%;
-  border: 1px solid rgba(39, 39, 39, 1);
   padding: 0;
   border-radius: 8px;
 }
 
-.city-popup_input{
+.city-popup_input_container_active {
+  border: 2px solid rgba(39, 39, 39, 1);
+}
+
+.city-popup_input {
   width: 100%;
   padding: 12px 20px;
-  margin: 8px 0;
   border-radius: 8px;
   font-size: 1rem;
   box-sizing: border-box;
   border: 2px solid rgba(151, 151, 151, 0.5);
   cursor: pointer;
   outline: none;
+  height: 100%;
 }
 
-.city-popup_input_actie{
+.clear_button {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(-50%, -50%);
+  margin-right: 20px;
+  color: #979797;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.clear_button img{
+  width: 12px;
+  height: 12px;
+}
+
+.city-popup_input_actie {
   border: 2px solid #fff;
   border-bottom: 2px solid rgba(151, 151, 151, 0.5);
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 
-.city-popup_button_disabled{
+.city-popup_button_disabled {
   font-family: "FuturaPT";
   cursor: not-allowed;
   color: rgba(39, 39, 39, 0.5);
@@ -212,9 +248,10 @@ export default {
   box-sizing: border-box;
   display: block;
   font-size: 1rem;
+  height: 48px;
 }
 
-.city-popup_button_active{
+.city-popup_button_active {
   font-family: "FuturaPT";
   display: block;
   cursor: pointer;
