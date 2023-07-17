@@ -28,7 +28,7 @@ export default {
         let res = await axios.get(`https://nlstar.com/ru/api/catalog3/v1/menutags/?city_id=${city_id}`)
         this.menuTags = res.data.tags;
       } catch (error) {
-        alert(error);
+        alert(error.message);
       }
     },
     loadCtegory(slug, name){
@@ -78,7 +78,7 @@ export default {
 
 .title{
   font-family: "FuturaPT";
-  font-size: 44px;
+  font-size: 2.5rem;
   margin-left: 20vw;
 }
 .category-wrapper{
@@ -116,5 +116,6 @@ export default {
   top: 20px;
   left: 20px;
   font-family: "FuturaPT";
+  font-size: 1rem;
 }
 </style>

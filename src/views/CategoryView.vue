@@ -6,8 +6,8 @@
   <div class="subcategory">
     <div class="subcategory-wrapper" :class="{'subcategory-wrapper_grid': subcategories.length >= 2}"> 
       <div v-if="subcategories.length >= 2" class="subcategory-menu">
-        <span class="subcategory-menu_item">Все продукты</span>
-        <span v-for="subcategory in subcategories" :key="subcategory.id" @click="loadSubcategoryMenu(subcategory.slug)" class="subcategory-menu_item">{{ subcategory.name }}</span>
+        <span @click="loadCategoryMenu()" :class="{'active': !$route.query.SubcategoryId}" class="subcategory-menu_item">Все продукты</span>
+        <span v-for="subcategory in subcategories" :key="subcategory.id" @click="loadSubcategoryMenu(subcategory.slug, subcategory.id)" :class="{'active': $route.query.SubcategoryId == subcategory.id}" class="subcategory-menu_item">{{ subcategory.name }}</span>
       </div>
       <div :class="[subcategories.length >= 2 ? 'subcategory-container_small' : 'subcategory-container_big']">
         <div v-for="product in products" :key="product.id" class="product">
@@ -36,20 +36,33 @@ export default {
     }
   },
   methods:{
-    async loadCategoryMenu(){
+    async loadCategoryMenu(city_id){
       try {
-        let res = await axios.get(`https://nlstar.com/ru/api/catalog3/v1/menutags/${this.$route.query.slug}/`)
+        let res = await axios.get(`https://nlstar.com/ru/api/catalog3/v1/menutags/${this.$route.query.slug}/?city_id=${city_id}`)
         this.products = res.data.products;
+        this.$router.push({
+          query: {
+            slug: this.$route.query.slug,
+            name: this.$route.query.name
+          }
+        })
       } catch (error) {
-        alert(error);
+        alert(error.message);
       }
     },
-    async loadSubcategoryMenu(SubcategorySlug){
+    async loadSubcategoryMenu(SubcategorySlug,SubcategoryId, city_id) {
       try {
-        let res = await axios.get(`https://nlstar.com/ru/api/catalog3/v1/menutags/${SubcategorySlug}/`)
+        let res = await axios.get(`https://nlstar.com/ru/api/catalog3/v1/menutags/${SubcategorySlug}/?city_id=${city_id}`)
         this.products = res.data.products;
+        this.$router.push({
+          query: {
+            SubcategoryId: SubcategoryId,
+            slug: this.$route.query.slug,
+            name: this.$route.query.name
+          }
+        })
       } catch (error) {
-        alert(error);
+        alert(error.message);
       }
     },
     async loadSubcategories(){
@@ -61,13 +74,19 @@ export default {
           }
         });
       } catch (error) {
-        alert(error);
+        alert(error.message);
       }
     }
   },
   async mounted(){
-    this.loadCategoryMenu();
-    this.loadSubcategories();
+    if (localStorage.getItem("id")) {
+      this.loadCategoryMenu(localStorage.getItem("id"));
+      this.loadSubcategories(localStorage.getItem("id"));
+    }
+    else {
+      this.loadCategoryMenu(1);
+      this.loadSubcategories(1);
+    }
   }
 }
 </script>
@@ -89,7 +108,7 @@ export default {
   font-family: "FuturaPT";
   text-decoration: none;
   color: #000;
-  font-size: 44px;
+  font-size: 2.5rem;
   margin-left: 20vw;
 }
 
@@ -98,6 +117,9 @@ export default {
   height: 30px;
 }
 
+.active{
+  background: rgba(233, 238, 243, 1);
+}
 .subcategory{
   max-width: 100vw;
   display: flex;
@@ -111,6 +133,7 @@ export default {
 .subcategory-wrapper_grid{
   display: grid;
   grid-template-columns: 1fr 3fr;
+  grid-gap: 2em;
 }
 
 .subcategory-container_small{
@@ -148,10 +171,13 @@ export default {
 .subcategory-menu_item{
   font-family: "FuturaPT regular";
   cursor: pointer;
+  font-size: 1rem;
+  padding: .5em;
+  border-bottom: 1px solid rgba(233, 238, 243, 1);
 }
 .product-category{
   font-family: "FuturaPT regular";
-  font-size: 14px;
+  font-size: .8rem;
   font-weight: 400;
   line-height: 14px;
   letter-spacing: 0px;
@@ -163,7 +189,7 @@ export default {
 
 .product-name{
   font-family: "FuturaPT";
-  font-size: 20px;
+  font-size: 1.5rem;
   font-weight: 600;
   line-height: 24px;
   letter-spacing: 0px;
@@ -176,7 +202,7 @@ export default {
 .product-comment{
   font-family: "FuturaPT regular";
   margin-top: 10px;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 400;
   line-height: 20px;
   width: 80%;
@@ -189,7 +215,7 @@ export default {
 .product-price{
   font-family: "FuturaPT";
   margin-top: 25px;
-  font-size: 26px;
+  font-size: 1.8rem;
   font-weight: 600;
   line-height: 24px;
   width: 80%;
@@ -215,6 +241,7 @@ export default {
  margin-top: 15px;
  margin-bottom: 20px;
  border-radius: 30px;
+ font-size: 1rem;
 }
 
 .product-cart_inactive {
@@ -231,5 +258,6 @@ export default {
   margin-top: 15px;
   margin-bottom: 20px;
   border-radius: 30px;
+  font-size: 1rem;
 }
 </style>

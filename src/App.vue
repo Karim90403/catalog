@@ -2,17 +2,20 @@
   <div class="city" @click="showPopup = true">
     <img src="../src/assets/geoposition.png">
     {{ cityName }}</div>
-  <router-view/>
+  <router-view v-if="reranderComponents"/>
   <div v-show="showPopup" class="city-popup_container">
     <div @click="showPopup = false" class="city-popup_mask"></div>
     <div class="city-popup">
       <span class="city-popup_title">Выбор населённого пункта:</span>
-      <p>
-        <input type="text" v-model="searchInput" @input="getCity()" placeholder="Например, Санкт-петербург" class="city-popup_input">
+      <img class="city-popup_close" src="../src/assets/close.png">
+      <div class="city-popup_search">
+        <div class="city-popup_input_container">
+          <input type="text" v-model="searchInput" @input="getCity" placeholder="Например, Санкт-петербург" class="city-popup_input" :class="{'city-popup_input_actie': showCities}">
+          <div v-if="showCities" class="city-popup_list">
+            <span v-for="city in cityArr" :key="city.id" @click="chooseCity(city.id, city.city, city.label)">{{ city.label }}</span>
+          </div>
+        </div>
         <span @click="changeCity()" :class="buttonActive ? 'city-popup_button_active' : 'city-popup_button_disabled'">Подтверить</span>
-      </p>
-      <div class="city-popup_list">
-        <span v-for="city in cityArr" :key="city.id" @click="chooseCity(city.id, city.city, city.label)">{{ city.label }}</span>
       </div>
     </div>
   </div>
@@ -29,17 +32,24 @@ export default {
       searchInput: '',
       id: 0,
       showPopup: false,
+      buttonActive: false,
+      showCities: false,
+      reranderComponents: true,
     }
   },
   methods:{
     async getCity(){
       if(this.searchInput.length >= 3){
+        this.showCities = true;
         try {
           let res = await axios.get(`https://nlstar.com/api/catalog3/v1/city/?country=ru&term=${this.searchInput}`)
           this.cityArr = res.data.data;
         } catch (error) {
-          alert(error);
+          alert(error.message);
         }
+      }
+      else {
+        this.showCities = false;
       }
     },
     changeCity() {
@@ -55,7 +65,12 @@ export default {
       this.id = id;
       this.searchInput = label;
       this.buttonActive = true;
-    }
+      this.showCities = false;
+    },
+    loadMenu(){
+     this.reranderComponents = false;
+     this.reranderComponents = true;
+    },
   },
   mounted(){
     this.cityName = localStorage.getItem("city") ?? "Новосибирск";
@@ -69,7 +84,6 @@ export default {
   src: local("FuturaPT"),
     url(./fonts/FuturaPT.ttf) format("truetype");
 }
-
  .city {
   font-family: "FuturaPT";
   display: flex;
@@ -78,7 +92,7 @@ export default {
   width: 100vw;
   box-sizing: border-box;
   padding-left: 20vw;
-  font-size: 15px;
+  font-size: 1rem;
   margin-bottom: 3vh;
   box-shadow: 0px 2px 4px 0px rgba(39, 39, 39, 0.1);
 }
@@ -113,7 +127,8 @@ export default {
 
 .city-popup {
   position: relative;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   color: #000;
   background-color: #fff;
   box-shadow: 0px 2px 10px 0px rgba(151, 151, 151, 0.2); 
@@ -126,28 +141,61 @@ export default {
 .city-popup_title{
   font-family: "FuturaPT";
   color: #000;
-  font-size: 20px;
+  font-size: 1.4rem;
   font-weight: 600;
   line-height: 24px;
   letter-spacing: 0px;
+}
+
+.city-popup_close{
+  position: absolute;
+  right: 1em;
+  top: 1em;
+  width: 1em;
+  height: 1em;
+}
+
+.city-popup_search{
+  display: inline-block;
 }
 .city-popup_list {
   font-family: "FuturaPT";
   display: flex;
   flex-direction: column;
   font-family: "FuturaPT";
+  background-color: #fff;
+  padding: 12px 20px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  margin-top: 0;
+}
 
+.city-popup_input_container{
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 70%;
+  border: 1px solid rgba(39, 39, 39, 1);
+  padding: 0;
+  border-radius: 8px;
 }
 
 .city-popup_input{
-  width: 70%;
+  width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
   border-radius: 8px;
+  font-size: 1rem;
   box-sizing: border-box;
   border: 2px solid rgba(151, 151, 151, 0.5);
   cursor: pointer;
   outline: none;
+}
+
+.city-popup_input_actie{
+  border: 2px solid #fff;
+  border-bottom: 2px solid rgba(151, 151, 151, 0.5);
 }
 
 .city-popup_button_disabled{
@@ -162,11 +210,13 @@ export default {
   margin-left: 2%;
   border-radius: 30px;
   box-sizing: border-box;
-  font-size: 16px;
+  display: block;
+  font-size: 1rem;
 }
 
 .city-popup_button_active{
   font-family: "FuturaPT";
+  display: block;
   cursor: pointer;
   color: #fff;
   border: none;
@@ -179,6 +229,6 @@ export default {
   margin-left: 2%;
   border-radius: 30px;
   box-sizing: border-box;
-  font-size: 16px;
+  font-size: 1rem;
 }
 </style>
