@@ -1,17 +1,16 @@
 <template>
-  <span class="title">Категории товаров</span>
+  <span class="title text">Категории товаров</span>
   <div class="category-wrapper">
     <div class="category-container">
       <div v-for="tag in menuTags" :key="tag.id" @click="loadCtegory(tag.slug, tag.name)" class="category-item">
         <img :src="`${tag.image}`" :alt="`${tag.name}`">
-        <span :style="'color:' + tag.text_color + ';'" class="category-item_name">{{tag.name}}</span>
+        <span :style="'color:' + tag.text_color + ';'" class="category-item_name text">{{tag.name}}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 import axios from 'axios';
 export default {
   name: 'HomeView',
@@ -76,8 +75,11 @@ export default {
     url(../fonts/FuturaPT.ttf) format("truetype");
 }
 
-.title{
+.text{
   font-family: "FuturaPT";
+}
+
+.title{
   font-size: 2.5rem;
   margin-left: 20vw;
 }
@@ -115,7 +117,6 @@ export default {
   width: 70%;
   top: 20px;
   left: 20px;
-  font-family: "FuturaPT";
   font-size: 1rem;
 }
 </style>
