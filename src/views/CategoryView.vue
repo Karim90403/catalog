@@ -1,23 +1,23 @@
 <template>
-  <router-link class="back" to="/">
+  <router-link class="back text" to="/">
     <img src="../assets/back.png">
     {{ $route.query.name }}
   </router-link>
   <div class="subcategory">
     <div class="subcategory-wrapper" :class="{'subcategory-wrapper_grid': subcategories.length >= 2}"> 
       <div v-if="subcategories.length >= 2" class="subcategory-menu">
-        <span @click="loadCategoryMenu()" :class="{'active': !$route.query.SubcategoryId}" class="subcategory-menu_item">Все продукты</span>
-        <span v-for="subcategory in subcategories" :key="subcategory.id" @click="loadSubcategoryMenu(subcategory.slug, subcategory.id)" :class="{'active': $route.query.SubcategoryId == subcategory.id}" class="subcategory-menu_item">{{ subcategory.name }}</span>
+        <span @click="loadCategoryMenu()" :class="{'active': !$route.query.SubcategoryId}" class="subcategory-menu_item text-regular">Все продукты</span>
+        <span v-for="subcategory in subcategories" :key="subcategory.id" @click="loadSubcategoryMenu(subcategory.slug, subcategory.id)" :class="{'active': $route.query.SubcategoryId == subcategory.id}" class="subcategory-menu_item text-regular">{{ subcategory.name }}</span>
       </div>
       <div :class="[subcategories.length >= 2 ? 'subcategory-container_small' : 'subcategory-container_big']">
         <div v-for="product in products" :key="product.id" class="product">
           <img :src="`${product.image}`" :alt="`${product.full_name}`">
-          <span class="product-category"> {{ product.category.name }} </span>
-          <span class="product-name">{{ product.present_name }}</span>
-          <span class="product-comment"> {{ product.comment_name }} </span>
-          <span class="product-price"> {{ product.price }} ₽</span>
-          <a v-if="product.allowed && product.available" :href="`https://nlstar.com${product.url}`" target="_blank" class="product-cart_url">В корзину</a>
-          <span v-else class="product-cart_inactive">Нет в наличии</span>
+          <span class="product-category text-regular"> {{ product.category.name }} </span>
+          <span class="product-name text">{{ product.present_name }}</span>
+          <span class="product-comment text-regular"> {{ product.comment_name }} </span>
+          <span class="product-price text"> {{ product.price }} ₽</span>
+          <a v-if="product.allowed && product.available" :href="`https://nlstar.com${product.url}`" target="_blank" class="product-cart_url text">В корзину</a>
+          <span v-else class="product-cart_inactive text">Нет в наличии</span>
         </div>
       </div>
     </div>
@@ -106,10 +106,16 @@ export default {
     url(../fonts/FuturaPT-reg.ttf) format("truetype");
 }
 
-.back{
+.text{
   font-family: "FuturaPT";
   text-decoration: none;
   color: #000;
+}
+
+.text-regular {
+  font-family: "FuturaPT regular";
+}
+.back{
   font-size: 2.5rem;
   margin-left: 20vw;
 }
@@ -122,6 +128,7 @@ export default {
 .active{
   background: rgba(233, 238, 243, 1);
 }
+
 .subcategory{
   max-width: 100vw;
   display: flex;
@@ -150,6 +157,20 @@ export default {
   grid-gap: 12px;
 }
 
+.subcategory-menu{
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  height: 321px;
+}
+
+.subcategory-menu_item{
+  cursor: pointer;
+  font-size: 1rem;
+  padding: .5em;
+  border-bottom: 1px solid rgba(233, 238, 243, 1);
+}
+
 .product{
   position: relative;
   max-width: fit-content;
@@ -162,23 +183,7 @@ export default {
 .product img{
   width: 100%;
 }
-
-.subcategory-menu{
-  display: flex;
-  flex-direction: column;
-  width: 240px;
-  height: 321px;
-}
-
-.subcategory-menu_item{
-  font-family: "FuturaPT regular";
-  cursor: pointer;
-  font-size: 1rem;
-  padding: .5em;
-  border-bottom: 1px solid rgba(233, 238, 243, 1);
-}
 .product-category{
-  font-family: "FuturaPT regular";
   font-size: .8rem;
   font-weight: 400;
   line-height: 14px;
@@ -190,7 +195,6 @@ export default {
 }
 
 .product-name{
-  font-family: "FuturaPT";
   font-size: 1.5rem;
   font-weight: 600;
   line-height: 24px;
@@ -202,7 +206,6 @@ export default {
 }
 
 .product-comment{
-  font-family: "FuturaPT regular";
   margin-top: 10px;
   font-size: 1rem;
   font-weight: 400;
@@ -215,7 +218,6 @@ export default {
 }
 
 .product-price{
-  font-family: "FuturaPT";
   margin-top: 25px;
   font-size: 1.8rem;
   font-weight: 600;
@@ -229,7 +231,6 @@ export default {
 
 .product-cart_url{
  cursor: pointer;
- font-family: "FuturaPT";
  background: linear-gradient(270deg, #FFA800 0%, #FF6F00 100%);
  box-shadow: 0px 5px 25px #FFA800;
  text-decoration: none;

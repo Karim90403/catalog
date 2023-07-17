@@ -1,5 +1,5 @@
 <template>
-  <div class="city" @click="showPopup = true">
+  <div class="city text" @click="showPopup = true">
     <img src="../src/assets/geoposition.png">
     {{ cityName }}
   </div>
@@ -7,22 +7,22 @@
   <div v-show="showPopup" class="city-popup_container">
     <div @click="showPopup = false" class="city-popup_mask"></div>
     <div class="city-popup">
-      <span class="city-popup_title">Выбор населённого пункта:</span>
+      <span class="city-popup_title text">Выбор населённого пункта:</span>
       <img class="city-popup_close" @click="showPopup = false" src="../src/assets/close.png">
       <div class="city-popup_search">
         <div class="city-popup_input_container" :class="{ 'city-popup_input_container_active': showCities }">
           <div class="input_group" style="position: relative !important;">
             <input type="text" v-model="searchInput" @input="getCity" placeholder="Например, Санкт-петербург"
-              class="city-popup_input" :class="{ 'city-popup_input_actie': showCities }">
-            <span class="clear_button" @click="searchInput = ''; showCities= false"><img @click="showPopup = false" src="../src/assets/close.png"></span>
+              class="city-popup_input text" :class="{ 'city-popup_input_actie': showCities }">
+            <span class="clear_button" @click="searchInput = ''; showCities= false"><img src="../src/assets/close.png"></span>
           </div>
-          <div v-if="showCities" class="city-popup_list">
+          <div v-if="showCities" class="city-popup_list text">
             <span style="padding: .5em;" v-for="city in cityArr" :key="city.id"
               @click="chooseCity(city.id, city.city, city.label)">{{ city.label }}</span>
           </div>
         </div>
         <span @click="changeCity()"
-          :class="buttonActive ? 'city-popup_button_active' : 'city-popup_button_disabled'">Подтверить</span>
+          :class="buttonActive ? 'city-popup_button_active' : 'city-popup_button_disabled'" class="text">Подтверить</span>
       </div>
     </div>
   </div>
@@ -92,8 +92,11 @@ export default {
     url(./fonts/FuturaPT.ttf) format("truetype");
 }
 
-.city {
+.text{
   font-family: "FuturaPT";
+}
+
+.city {
   display: flex;
   align-items: center;
   height: 7vh;
@@ -217,7 +220,6 @@ export default {
   border-bottom-right-radius: 0 !important;
 }
 .city-popup_list {
-  font-family: "FuturaPT";
   display: flex;
   flex-direction: column;
   font-family: "FuturaPT";
@@ -233,7 +235,6 @@ export default {
 }
 
 .city-popup_button_disabled {
-  font-family: "FuturaPT";
   cursor: not-allowed;
   color: rgba(39, 39, 39, 0.5);
   border: 2px solid rgba(151, 151, 151, 0.3);
@@ -250,7 +251,6 @@ export default {
 }
 
 .city-popup_button_active {
-  font-family: "FuturaPT";
   display: block;
   cursor: pointer;
   color: #fff;
