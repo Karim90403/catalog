@@ -33,6 +33,7 @@ export default {
     return{
       products: [],
       subcategories: [],
+      city_id: 1
     }
   },
   methods:{
@@ -50,9 +51,9 @@ export default {
         alert(error.message);
       }
     },
-    async loadSubcategoryMenu(SubcategorySlug,SubcategoryId, city_id) {
+    async loadSubcategoryMenu(SubcategorySlug,SubcategoryId) {
       try {
-        let res = await axios.get(`https://nlstar.com/ru/api/catalog3/v1/menutags/${SubcategorySlug}/?city_id=${city_id}`)
+        let res = await axios.get(`https://nlstar.com/ru/api/catalog3/v1/menutags/${SubcategorySlug}/?city_id=${this.city_id}`)
         this.products = res.data.products;
         this.$router.push({
           query: {
@@ -80,6 +81,7 @@ export default {
   },
   async mounted(){
     if (localStorage.getItem("id")) {
+      this.city_id = localStorage.getItem("id");
       this.loadCategoryMenu(localStorage.getItem("id"));
       this.loadSubcategories(localStorage.getItem("id"));
     }

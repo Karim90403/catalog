@@ -170,22 +170,6 @@ export default {
   display: flex;
 }
 
-.city-popup_list {
-  font-family: "FuturaPT";
-  display: flex;
-  flex-direction: column;
-  font-family: "FuturaPT";
-  background-color: #fff;
-  padding: 12px 20px;
-  font-size: 1rem;
-  border-radius: 8px;
-  overflow-y: scroll;
-  box-sizing: border-box;
-  cursor: pointer;
-  margin-top: 0;
-  max-height: 30vh;
-}
-
 .city-popup_input_container {
   display: flex;
   flex-direction: column;
@@ -197,18 +181,6 @@ export default {
 
 .city-popup_input_container_active {
   border: 2px solid rgba(39, 39, 39, 1);
-}
-
-.city-popup_input {
-  width: 100%;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
-  box-sizing: border-box;
-  border: 2px solid rgba(151, 151, 151, 0.5);
-  cursor: pointer;
-  outline: none;
-  height: 100%;
 }
 
 .clear_button {
@@ -226,12 +198,38 @@ export default {
   width: 12px;
   height: 12px;
 }
+.city-popup_input {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  border: 2px solid rgba(151, 151, 151, 0.5);
+  cursor: pointer;
+  outline: none;
+  height: 100%;
+}
 
 .city-popup_input_actie {
   border: 2px solid #fff;
   border-bottom: 2px solid rgba(151, 151, 151, 0.5);
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
+}
+.city-popup_list {
+  font-family: "FuturaPT";
+  display: flex;
+  flex-direction: column;
+  font-family: "FuturaPT";
+  background-color: #fff;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  overflow-y: scroll;
+  box-sizing: border-box;
+  cursor: pointer;
+  margin-top: 0;
+  max-height: 30vh;
 }
 
 .city-popup_button_disabled {
